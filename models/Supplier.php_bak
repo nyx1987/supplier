@@ -1,0 +1,74 @@
+<?php
+
+namespace app\models;
+
+use Yii;
+use yii\base\Model;
+
+/**
+ * ContactForm is the model behind the contact form.
+ */
+class Supplierssss extends Model
+{
+    public $name;
+    public $email;
+    public $subject;
+    public $body;
+    public $verifyCode;
+
+
+    /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+        ];
+    }
+
+    /**
+     * @return array customized attribute labels
+     */
+    public function attributeLabels()
+    {
+        return [
+        ];
+    }
+
+
+    public function search($params)
+    {
+        $query = Supplier::find();
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+                'pagination' => [
+                'pageSize' => 2, //每页显示条数
+                ],
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+                'population' => $this->population,
+        ]);
+
+        $query->andFilterWhere(['like', 'code', $this->code])
+            ->andFilterWhere(['like', 'name', $this->name]);
+
+        return $dataProvider;
+    }
+
+    public function test(){
+      $res =   Supplier::find()->all();
+    }
+
+}
